@@ -1,16 +1,19 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { ScrollView, Text, View, Dimensions, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import { PieChart } from 'react-native-chart-kit';
 import { useTaskStore } from '../store/taskStore';
 import { useRoutineStore } from '../store/routineStore';
+import AddRoutineModal from '../components/AddRoutineModal';
 
 const chartSize = Dimensions.get('window').width - 32;
 
 const HomeScreen = () => {
+  const [isModalVisible, setModalVisible] = useState(false);
   const tasks = useTaskStore((state) => state.tasks);
   const routines = useRoutineStore((state) => state.routines);
+  const toggleRoutine = useRoutineStore((state) => state.toggleRoutine);
 
   const { completedCount, pendingCount, completionData } = useMemo(() => {
     const completed = tasks.filter((t) => t.completed).length;
@@ -35,13 +38,7 @@ const HomeScreen = () => {
     return { completedCount: completed, pendingCount: pending, completionData: data };
   }, [tasks]);
 
-  const todayRoutines = routines.length
-    ? routines
-    : [
-        { id: '1', title: 'Wake up', time: '07:00', completed: true },
-        { id: '2', title: 'Exercise', time: '08:00', completed: false },
-        { id: '3', title: 'Plan day', time: '08:30', completed: false },
-      ];
+  const todayRoutines = routines;
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -56,9 +53,10 @@ const HomeScreen = () => {
           <Text className="mb-3 text-lg font-semibold text-gray-900">Today's Routine</Text>
           <View className="gap-3">
             {todayRoutines.map((item) => (
-              <View
+              <Pressable
                 key={item.id}
                 className="flex-row items-center gap-3 rounded-xl bg-white/80 p-3"
+                onPress={() => toggleRoutine(item.id)}
               >
                 <View className="h-12 w-12 items-center justify-center rounded-full bg-primary/15">
                   <Text className="text-sm font-semibold text-primary-dark">{item.time}</Text>
@@ -72,7 +70,7 @@ const HomeScreen = () => {
                   size={24}
                   color={item.completed ? '#10b981' : '#d1d5db'}
                 />
-              </View>
+              </Pressable>
             ))}
           </View>
         </View>
@@ -128,11 +126,12 @@ const HomeScreen = () => {
 
       <Pressable
         className="absolute bottom-6 right-6 h-14 w-14 items-center justify-center rounded-full bg-primary shadow-lg shadow-primary/40"
-        onPress={() => {}}
+        onPress={() => setModalVisible(true)}
         accessibilityLabel="Quick add"
       >
         <MaterialIcons name="add" size={28} color="#ffffff" />
       </Pressable>
+      <AddRoutineModal visible={isModalVisible} onClose={() => setModalVisible(false)} />
     </SafeAreaView>
   );
 };

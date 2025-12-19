@@ -7,6 +7,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import HomeScreen from './src/screens/HomeScreen';
+import RoutinesScreen from './src/screens/RoutinesScreen';
+import TasksScreen from './src/screens/TasksScreen';
+import NotesScreen from './src/screens/NotesScreen';
 
 type TabParamList = {
   Home: undefined;
@@ -38,7 +41,7 @@ const PlaceholderScreen = ({ title }: { title: string }) => (
   <SafeAreaView className="flex-1 items-center justify-center bg-white">
     <View className="items-center gap-2">
       <View className="h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-        <MaterialIcons name="check-circle" size={28} color="#10b981" />
+        <MaterialIcons name="settings" size={28} color="#6b7280" />
       </View>
       <Text className="text-xl font-semibold text-gray-900">{title}</Text>
       <Text className="text-gray-500">Coming soon</Text>
@@ -46,9 +49,6 @@ const PlaceholderScreen = ({ title }: { title: string }) => (
   </SafeAreaView>
 );
 
-const RoutinesScreen = () => <PlaceholderScreen title="Routines" />;
-const TasksScreen = () => <PlaceholderScreen title="Tasks" />;
-const NotesScreen = () => <PlaceholderScreen title="Notes" />;
 const SettingsScreen = () => <PlaceholderScreen title="Settings" />;
 
 export default function App() {

@@ -17,7 +17,7 @@ export interface Task {
 
 interface TaskState {
   tasks: Task[];
-  addTask: (task: Task) => void;
+  addTask: (task: Omit<Task, 'id'>) => void;
   editTask: (id: string, updates: Partial<Task>) => void;
   deleteTask: (id: string) => void;
   toggleComplete: (id: string) => void;
@@ -28,7 +28,10 @@ export const useTaskStore = create<TaskState>()(
   persist(
     (set, get) => ({
       tasks: [],
-      addTask: (task) => set((state) => ({ tasks: [...state.tasks, task] })),
+      addTask: (task) =>
+        set((state) => ({
+          tasks: [...state.tasks, { ...task, id: Date.now().toString() }],
+        })),
       editTask: (id, updates) =>
         set((state) => ({
           tasks: state.tasks.map((task) => (task.id === id ? { ...task, ...updates } : task)),

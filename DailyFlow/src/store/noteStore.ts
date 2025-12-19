@@ -13,7 +13,7 @@ export interface Note {
 
 interface NoteState {
   notes: Note[];
-  addNote: (note: Note) => void;
+  addNote: (note: Omit<Note, 'id' | 'createdAt' | 'updatedAt'>) => void;
   updateNote: (id: string, updates: Partial<Note>) => void;
   deleteNote: (id: string) => void;
   clearAll: () => void;
@@ -23,10 +23,21 @@ export const useNoteStore = create<NoteState>()(
   persist(
     (set) => ({
       notes: [],
-      addNote: (note) => set((state) => ({ notes: [...state.notes, note] })),
+      addNote: (note) =>
+        set((state) => {
+          const now = new Date().toISOString();
+          return {
+            notes: [
+              ...state.notes,
+              { ...note, id: Date.now().toString(), createdAt: now, updatedAt: now },
+            ],
+          };
+        }),
       updateNote: (id, updates) =>
         set((state) => ({
-          notes: state.notes.map((note) => (note.id === id ? { ...note, ...updates, updatedAt: updates.updatedAt ?? note.updatedAt } : note)),
+          notes: state.notes.map((note) =>
+            note.id === id ? { ...note, ...updates, updatedAt: new Date().toISOString() } : note,
+          ),
         })),
       deleteNote: (id) => set((state) => ({ notes: state.notes.filter((note) => note.id !== id) })),
       clearAll: () => set({ notes: [] }),

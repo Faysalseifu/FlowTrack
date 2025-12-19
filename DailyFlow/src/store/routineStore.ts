@@ -11,7 +11,7 @@ export interface RoutineItem {
 
 interface RoutineState {
   routines: RoutineItem[];
-  addRoutine: (item: RoutineItem) => void;
+  addRoutine: (item: Omit<RoutineItem, 'id'>) => void;
   updateRoutine: (id: string, updates: Partial<RoutineItem>) => void;
   deleteRoutine: (id: string) => void;
   toggleRoutine: (id: string) => void;
@@ -22,7 +22,10 @@ export const useRoutineStore = create<RoutineState>()(
   persist(
     (set) => ({
       routines: [],
-      addRoutine: (item) => set((state) => ({ routines: [...state.routines, item] })),
+      addRoutine: (item) =>
+        set((state) => ({
+          routines: [...state.routines, { ...item, id: Date.now().toString() }],
+        })),
       updateRoutine: (id, updates) =>
         set((state) => ({
           routines: state.routines.map((routine) =>

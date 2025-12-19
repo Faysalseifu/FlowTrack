@@ -1,6 +1,4 @@
-import { ExpoConfig, ConfigContext } from 'expo/config';
-
-export default ({ config }: ConfigContext): ExpoConfig => ({
+module.exports = ({ config }) => ({
   ...config,
   name: 'DailyFlow',
   slug: 'dailyflow',
@@ -30,7 +28,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     favicon: './assets/favicon.png',
   },
   runtimeVersion: {
-    policy: 'nativeVersion',
+    policy: 'sdkVersion',
   },
   plugins: ['nativewind/babel'],
 });

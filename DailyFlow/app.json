@@ -1,8 +1,7 @@
 {
   "expo": {
     "name": "DailyFlow",
-    "slug": "DailyFlow",
-    "sdkVersion": "54.0.0",
+    "slug": "dailyflow",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -26,9 +25,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "runtimeVersion": {
-      "policy": "nativeVersion"
     },
     "plugins": ["nativewind/babel"]
   }
